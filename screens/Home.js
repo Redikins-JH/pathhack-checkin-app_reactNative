@@ -28,12 +28,6 @@ const LONGITUDE_DELTA = 0.002;
 
 class Home extends Component {
   state = {
-    region: {
-      latitude: 331,
-      longitude: 111,
-      latitudeDelta: 0.02,
-      longitudeDelta: 0.02,
-    },
     locationResult: null,
     neww: null,
     cameraOn : false
@@ -43,13 +37,13 @@ class Home extends Component {
     this._getLocationAsync();
    };
      
-  
+  //화면 오른쪽 위 검정 버튼 클릭시 실행되는 함수
   _onPressLocationButton = () => {
     this._getLocationAsync();
     this.setState({neww: JSON.parse(this.state.locationResult).coords})
     this.setState({cameraOn : true})
   }
- // expo library 활용한 gps 가져오기
+ // expo library 활용한 gps 가져오는 함수
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
@@ -62,7 +56,7 @@ class Home extends Component {
     this.setState({ locationResult: JSON.stringify(location) });
   };
 
-//파이어 베이스 데이터 베잇로 현 로케이션 경위도 값 전송
+//파이어 베이스 데이터 베잇로 현 로케이션 경위도 값 전송 함수
   _post(location) {
     return fetch(`${databaseURL}/location.json`, {
         method: 'POST',
@@ -84,7 +78,7 @@ class Home extends Component {
     this._post(location);
   }
 
-
+//헤더부분 구현 함수
   renderHeader() {
     return (
       <View style={styles.header}>
@@ -107,20 +101,9 @@ class Home extends Component {
     )
   }  
   
+  //실제 화면 렌더되는 함수 헤더, 맵, 카메라 부분 (위의 함수들을 불러와 구현)
   render() {
     const { currentPosition } = this.props;
- 
-    // if (this.state.neww === null) {
-    //   var { latLon } = {
-    //     latitude: 35.231400,
-    //     longitude: 129.084160,
-    //   }
-    // } else {
-    //   var { latLon } = {
-    //     latitude: this.state.neww.coords.latitude,
-    //     longitude: this.state.neww.coords.longitude,
-    //   }
-    // }
 
     return (
       <View style={styles.container}>
@@ -161,7 +144,6 @@ class Home extends Component {
 
 //초기 지도 값 설정
 
-//this.state.locationResult
 Home.defaultProps = {
   currentPosition: {
     latitude: 37.785834,
@@ -173,7 +155,7 @@ Home.defaultProps = {
 
 export default Home;
 
-
+//css style 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
